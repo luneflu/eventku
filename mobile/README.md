@@ -1,17 +1,21 @@
-# eventku
+# Eventku
 
-A new Flutter project.
+Web Run Command:
+```
+flutter run -d web-server --web-hostname 0.0.0.0 --web-port 8989
+```
 
-## Getting Started
+Chrome Run Command:
+```
+flutter run -d chrome --web-browser-flag "--disable-web-security"
+```
 
-This project is a starting point for a Flutter application.
+Android Build Test Command: 
+```
+flutter build apk --split-per-abi --release
+```
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Android Build Release Command: 
+```
+flutter build appbundle --release
+```
