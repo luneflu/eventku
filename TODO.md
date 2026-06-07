@@ -11,8 +11,8 @@
   - Unique constraint on `(user_id, event_id)`
 
 ### 1.2. API Routes & Controllers
-- [ ] **Authentication API**
-  - [ ] Login / Register / Logout / Profile
+- [x] **Authentication API**
+  - [x] Login / Register / Logout / Profile
 - [ ] **Event Management (Organizer)**
   - [ ] `POST /api/events` - Create event (default status: `draft`)
   - [ ] `PUT /api/events/{id}` - Update event (only allowed if status is `draft`)
@@ -37,7 +37,7 @@
 ## 2. Frontend (Flutter App)
 
 ### 2.1. Authentication
-- [ ] Implement Sign Up & Log In screens
+- [x] Implement Sign Up & Log In screens
 
 ### 2.2. Main Navigation (Bottom Navigation Bar)
 - [ ] **Home Tab**: List all public events (tap to view details)
