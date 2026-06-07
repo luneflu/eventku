@@ -47,6 +47,21 @@ Eventku event management app.
 - **QR Code Scanner**: `mobile_scanner` — use in Scan tab
 - **Permissions**: `permission_handler` — camera (scanner), storage (certificate download)
 - **File Save & Open**: `path_provider` + `open_filex` — save certificate image and open
+- **UI Components**: `forui` — use Forui library UI for Flutter (refer forui.dev/docs)
+
+### Design Palette (Noir & Gold)
+- **Primary / Background**: Obsidian `#12110F`
+- **Surface / Card bg**: Charcoal `#1E1C18`
+- **Elevated surface**: Ash `#2D2A23`
+- **Accent / CTA / Active**: Gold `#C9A84C`
+- **Pressed / Disabled gold**: Bronze `#8C7030`
+- **Primary text**: Ivory `#F5F0E8`
+- **Secondary text**: Dust `#9E9484`
+- **Dividers / borders**: Smoke `#3A3629`
+- **Selected row / chip bg**: Gold tint `#C9A84C` (13% opacity)
+- **Success / Available**: Emerald `#4CAF7D`
+- **Error / Sold out**: Crimson `#E05252`
+- **Warning / Limited**: Amber `#D9923A`
 
 ### Conventions
 - Inject Sanctum token via `dio` interceptor, never per-request
