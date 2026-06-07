@@ -3,10 +3,10 @@
 ## 1. Backend (Laravel)
 
 ### 1.1. Database & Models
-- [ ] Create/Update Migration for `users` (general user can be both organizer & participant)
-- [ ] Create Migration for `events`
+- [x] Create/Update Migration for `users` (general user can be both organizer & participant)
+- [x] Create Migration for `events`
   - Fields: `id`, `title`, `description`, `date`, `location`, `organizer_id` (foreign key to `users`), `status` (`draft`, `public`, `cancelled`, `finished`), general event requirements (e.g., max_capacity, registration_deadline)
-- [ ] Create Migration for `participations` (junction table)
+- [x] Create Migration for `participations` (junction table)
   - Fields: `id`, `user_id` (foreign key to `users`), `event_id` (foreign key to `events`), `attended` (boolean), `attended_at` (timestamp)
   - Unique constraint on `(user_id, event_id)`
 
