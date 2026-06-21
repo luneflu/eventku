@@ -4,6 +4,9 @@ import '../providers/auth_provider.dart';
 import '../screens/login_screen.dart';
 import '../screens/register_screen.dart';
 import '../screens/dashboard_screen.dart';
+import '../screens/create_event_screen.dart';
+import '../screens/event_details_screen.dart';
+import '../models/event.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
@@ -34,6 +37,17 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/dashboard',
         builder: (context, state) => const DashboardScreen(),
+      ),
+      GoRoute(
+        path: '/create-event',
+        builder: (context, state) => const CreateEventScreen(),
+      ),
+      GoRoute(
+        path: '/event-details',
+        builder: (context, state) {
+          final event = state.extra as Event;
+          return EventDetailsScreen(event: event);
+        },
       ),
     ],
   );

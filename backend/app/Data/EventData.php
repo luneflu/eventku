@@ -20,6 +20,7 @@ class EventData extends Data
         public ?string $qr_token,
         public int $max_capacity,
         public Carbon $registration_deadline,
+        public int $organizer_id,
         public ?UserData $organizer,
     ) {}
 
@@ -35,6 +36,7 @@ class EventData extends Data
             qr_token: $event->qr_token,
             max_capacity: $event->max_capacity,
             registration_deadline: $event->registration_deadline,
+            organizer_id: $event->organizer_id,
             organizer: $event->relationLoaded('organizer') ? UserData::fromModel($event->organizer) : null,
         );
     }

@@ -14,11 +14,11 @@ class MyEventController extends Controller
     {
         $events = QueryBuilder::for(Event::class)
             ->where('organizer_id', $request->user()->id)
-            ->allowedFilters(['status', 'title'])
-            ->allowedSorts(['date', 'created_at'])
+            ->allowedFilters('status', 'title')
+            ->allowedSorts('date', 'created_at')
             ->defaultSort('-created_at')
             ->paginate();
 
-        return EventData::collection($events);
+        return EventData::collect($events);
     }
 }

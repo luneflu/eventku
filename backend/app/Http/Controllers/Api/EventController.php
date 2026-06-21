@@ -22,13 +22,13 @@ class EventController extends Controller
     {
         $events = QueryBuilder::for(Event::class)
             ->where('status', 'public')
-            ->allowedFilters(['title', 'location'])
-            ->allowedSorts(['date', 'created_at'])
+            ->allowedFilters('title', 'location')
+            ->allowedSorts('date', 'created_at')
             ->defaultSort('date')
             ->with('organizer')
             ->paginate();
 
-        return EventData::collection($events);
+        return EventData::collect($events);
     }
 
     /**

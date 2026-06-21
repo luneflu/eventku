@@ -4,6 +4,9 @@ use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\MyEventController;
 use App\Http\Controllers\Api\EventStatusController;
 use App\Http\Controllers\Api\ParticipationController;
+use App\Http\Controllers\Api\CertificateController;
+use App\Http\Controllers\Api\AttendanceController;
+use App\Http\Controllers\Api\MyParticipationController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -28,4 +31,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/events/{event}/participate', [ParticipationController::class, 'store']);
     Route::delete('/events/{event}/participate', [ParticipationController::class, 'destroy']);
     Route::post('/events/{event}/attend', [ParticipationController::class, 'attend']);
+
+    Route::get('/events/{event}/certificate', [CertificateController::class, 'generate']);
+
+    Route::get('/my-participations', [MyParticipationController::class, 'index']);
+
+    Route::post('/attend-by-token', [AttendanceController::class, 'attendByToken']);
 });
