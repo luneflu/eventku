@@ -61,20 +61,20 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            TextField(
-              controller: _titleController,
-              decoration: const InputDecoration(labelText: 'Title'),
+            FTextField(
+              control: FTextFieldControl.managed(controller: _titleController),
+              label: const Text('Title'),
             ),
             const SizedBox(height: 16),
-            TextField(
-              controller: _descriptionController,
-              decoration: const InputDecoration(labelText: 'Description'),
+            FTextField(
+              control: FTextFieldControl.managed(controller: _descriptionController),
+              label: const Text('Description'),
               maxLines: 3,
             ),
             const SizedBox(height: 16),
-            TextField(
-              controller: _locationController,
-              decoration: const InputDecoration(labelText: 'Location'),
+            FTextField(
+              control: FTextFieldControl.managed(controller: _locationController),
+              label: const Text('Location'),
             ),
             const SizedBox(height: 16),
             // Minimal date picker trigger
