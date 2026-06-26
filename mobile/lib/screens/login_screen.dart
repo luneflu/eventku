@@ -1,9 +1,10 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forui/forui.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
+
+import '../utils/error_handler.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -44,7 +45,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       // Success will automatically trigger GoRouter redirect to /dashboard
     } catch (e) {
       setState(() {
-        _errorMessage = e.toString().replaceFirst('Exception: ', '');
+        _errorMessage = extractErrorMessage(e);
       });
     }
   }
@@ -56,17 +57,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     String? displayError = _errorMessage;
     if (authState.hasError && !isLoading) {
-      final error = authState.error;
-      if (error is DioException) {
-        final data = error.response?.data;
-        if (data is Map && data['message'] != null) {
-          displayError = data['message'].toString();
-        } else {
-          displayError = error.message;
-        }
-      } else {
-        displayError = error?.toString().replaceFirst('Exception: ', '');
-      }
+      displayError = extractErrorMessage(authState.error);
     }
 
     return FScaffold(

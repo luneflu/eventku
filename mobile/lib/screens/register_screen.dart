@@ -4,6 +4,8 @@ import 'package:forui/forui.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
 
+import '../utils/error_handler.dart';
+
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
 
@@ -53,7 +55,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       // Success will automatically trigger GoRouter redirect to /dashboard
     } catch (e) {
       setState(() {
-        _errorMessage = e.toString().replaceFirst('Exception: ', '');
+        _errorMessage = extractErrorMessage(e);
       });
     }
   }
@@ -62,6 +64,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
     final isLoading = authState.isLoading;
+
+    String? displayError = _errorMessage;
+    if (authState.hasError && !isLoading) {
+      displayError = extractErrorMessage(authState.error);
+    }
 
     return FScaffold(
       header: FHeader.nested(
@@ -125,10 +132,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   label: const Text('Password'),
                   hint: 'Enter your password (min 8 chars)',
                 ),
-                if (_errorMessage != null) ...[
+                if (displayError != null) ...[
                   const SizedBox(height: 16),
                   Text(
-                    _errorMessage!,
+                    displayError,
                     style: TextStyle(
                       color: context.theme.colors.error,
                       fontSize: 14,

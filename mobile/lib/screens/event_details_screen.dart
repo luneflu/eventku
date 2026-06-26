@@ -10,6 +10,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:open_filex/open_filex.dart';
 import 'dart:io';
 
+import '../utils/error_handler.dart';
+
 class EventDetailsScreen extends ConsumerStatefulWidget {
   final Event event;
   const EventDetailsScreen({super.key, required this.event});
@@ -21,6 +23,7 @@ class EventDetailsScreen extends ConsumerStatefulWidget {
 class _EventDetailsScreenState extends ConsumerState<EventDetailsScreen> {
   late Event _currentEvent;
   bool _isLoading = false;
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -37,7 +40,10 @@ class _EventDetailsScreenState extends ConsumerState<EventDetailsScreen> {
   }
 
   Future<void> _performAction(Future<void> Function() action) async {
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
     try {
       await action();
       await _refreshEvent();
@@ -45,7 +51,9 @@ class _EventDetailsScreenState extends ConsumerState<EventDetailsScreen> {
       ref.invalidate(myEventsProvider);
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+        setState(() {
+          _errorMessage = extractErrorMessage(e);
+        });
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -53,7 +61,10 @@ class _EventDetailsScreenState extends ConsumerState<EventDetailsScreen> {
   }
 
   Future<void> _downloadCertificate() async {
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
     try {
       final bytes = await ref.read(apiServiceProvider).downloadCertificate(_currentEvent.id);
       final dir = await getApplicationDocumentsDirectory();
@@ -66,7 +77,9 @@ class _EventDetailsScreenState extends ConsumerState<EventDetailsScreen> {
       await OpenFilex.open(file.path);
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to download: $e')));
+        setState(() {
+          _errorMessage = 'Failed to download: ${extractErrorMessage(e)}';
+        });
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -99,7 +112,14 @@ class _EventDetailsScreenState extends ConsumerState<EventDetailsScreen> {
             const SizedBox(height: 16),
             Text('Date: ${_currentEvent.date.toString().substring(0, 10)}'),
             Text('Location: ${_currentEvent.location}'),
-            const SizedBox(height: 32),
+            const SizedBox(height: 16),
+            if (_errorMessage != null)
+              FAlert(
+                title: const Text('Error'),
+                subtitle: Text(_errorMessage!),
+                style: context.theme.alertStyles.destructive,
+              ),
+            const SizedBox(height: 16),
             
             if (_isLoading) const Center(child: CircularProgressIndicator())
             else if (isOrganizer) ...[

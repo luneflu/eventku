@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:forui/forui.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../providers/auth_provider.dart';
+
+import '../../utils/error_handler.dart';
 
 class ScanTab extends ConsumerStatefulWidget {
   const ScanTab({super.key});
@@ -14,6 +17,8 @@ class _ScanTabState extends ConsumerState<ScanTab> {
   final MobileScannerController _scannerController = MobileScannerController();
   bool _isScanning = true;
   bool _isLoading = false;
+  String? _errorMessage;
+  String? _successMessage;
 
   @override
   void dispose() {
@@ -33,6 +38,8 @@ class _ScanTabState extends ConsumerState<ScanTab> {
     setState(() {
       _isScanning = false;
       _isLoading = true;
+      _errorMessage = null;
+      _successMessage = null;
     });
 
     try {
@@ -40,13 +47,15 @@ class _ScanTabState extends ConsumerState<ScanTab> {
       await api.attendByToken({'qr_token': code});
       
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Attendance recorded successfully!')),
-        );
+        setState(() {
+          _successMessage = 'Attendance recorded successfully!';
+        });
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+        setState(() {
+          _errorMessage = extractErrorMessage(e);
+        });
       }
     } finally {
       if (mounted) {
@@ -79,6 +88,28 @@ class _ScanTabState extends ConsumerState<ScanTab> {
               if (_isLoading)
                 const Center(
                   child: CircularProgressIndicator(),
+                )
+              else if (_errorMessage != null)
+                Positioned(
+                  bottom: 24,
+                  left: 16,
+                  right: 16,
+                  child: FAlert(
+                    title: const Text('Error'),
+                    subtitle: Text(_errorMessage!),
+                    style: context.theme.alertStyles.destructive,
+                  ),
+                )
+              else if (_successMessage != null)
+                Positioned(
+                  bottom: 24,
+                  left: 16,
+                  right: 16,
+                  child: FAlert(
+                    title: const Text('Success'),
+                    subtitle: Text(_successMessage!),
+                    style: context.theme.alertStyles.primary,
+                  ),
                 ),
             ],
           ),

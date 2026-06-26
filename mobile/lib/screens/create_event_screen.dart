@@ -5,6 +5,8 @@ import '../providers/auth_provider.dart';
 import '../providers/event_provider.dart';
 import 'package:go_router/go_router.dart';
 
+import '../utils/error_handler.dart';
+
 class CreateEventScreen extends ConsumerStatefulWidget {
   const CreateEventScreen({super.key});
 
@@ -16,13 +18,17 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _locationController = TextEditingController();
-  DateTime _selectedDate = DateTime.now().add(const Duration(days: 1));
+  DateTime _selectedDate = DateTime.now().add(const Duration(days: 7));
   bool _isLoading = false;
+  String? _errorMessage;
 
   Future<void> _submit() async {
     if (_titleController.text.isEmpty || _locationController.text.isEmpty) return;
 
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
     try {
       final api = ref.read(apiServiceProvider);
       await api.createEvent({
@@ -37,8 +43,9 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
       if (mounted) context.pop();
     } catch (e) {
       if (mounted) {
-        // Handle error
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+        setState(() {
+          _errorMessage = extractErrorMessage(e);
+        });
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -92,6 +99,14 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
                 }
               },
             ),
+            if (_errorMessage != null) ...[
+              const SizedBox(height: 16),
+              FAlert(
+                title: const Text('Error'),
+                subtitle: Text(_errorMessage!),
+                style: context.theme.alertStyles.destructive,
+              ),
+            ],
             const SizedBox(height: 32),
             FButton(
               onPress: _isLoading ? null : _submit,
