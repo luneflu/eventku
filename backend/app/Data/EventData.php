@@ -22,6 +22,8 @@ class EventData extends Data
         public Carbon $registration_deadline,
         public int $organizer_id,
         public ?UserData $organizer,
+        #[DataCollectionOf(UserData::class)]
+        public ?DataCollection $participants,
     ) {}
 
     public static function fromModel(Event $event): self
@@ -38,6 +40,7 @@ class EventData extends Data
             registration_deadline: $event->registration_deadline,
             organizer_id: $event->organizer_id,
             organizer: $event->relationLoaded('organizer') ? UserData::fromModel($event->organizer) : null,
+            participants: $event->relationLoaded('participants') ? UserData::collect($event->participants, DataCollection::class) : null,
         );
     }
 }

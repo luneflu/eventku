@@ -51,7 +51,7 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
-        return EventData::fromModel($event->load('organizer'));
+        return EventData::fromModel($event->load(['organizer', 'participants']));
     }
 
     /**

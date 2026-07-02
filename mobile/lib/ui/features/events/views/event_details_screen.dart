@@ -63,6 +63,7 @@ class _EventDetailsScreenState extends ConsumerState<EventDetailsScreen> {
     final currentEvent = eventState.value ?? widget.event;
     final isOrganizer = currentUser?.id == currentEvent.organizerId;
     final isLoading = eventState.isLoading;
+    final hasJoined = currentEvent.participants?.any((p) => p.id == currentUser?.id) ?? false;
 
     return FScaffold(
       header: FHeader(
@@ -135,24 +136,53 @@ class _EventDetailsScreenState extends ConsumerState<EventDetailsScreen> {
                 ),
             ] else ...[
               // Participant actions
-              FButton(
-                onPress: () => _performAction(() => ref.read(eventDetailsViewModelProvider(widget.event).notifier).participate()),
-                child: const Text('Participate'),
-              ),
-              const SizedBox(height: 8),
-              FButton(
-                variant: FButtonVariant.outline,
-                onPress: () => _performAction(() => ref.read(eventDetailsViewModelProvider(widget.event).notifier).cancelParticipation()),
-                child: const Text('Cancel Participation'),
-              ),
-              if (currentEvent.status == 'finished') ...[
+              if (!hasJoined && currentEvent.status == 'public') ...[
+                FButton(
+                  onPress: () => _performAction(() => ref.read(eventDetailsViewModelProvider(widget.event).notifier).participate()),
+                  child: const Text('Participate'),
+                ),
+                const SizedBox(height: 8),
+              ],
+              if (hasJoined && currentEvent.status == 'public') ...[
+                FButton(
+                  variant: FButtonVariant.outline,
+                  onPress: () => _performAction(() => ref.read(eventDetailsViewModelProvider(widget.event).notifier).cancelParticipation()),
+                  child: const Text('Cancel Participation'),
+                ),
+                const SizedBox(height: 8),
+              ],
+              if (currentEvent.status == 'finished' && hasJoined) ...[
                 const SizedBox(height: 16),
                 FButton(
                   onPress: _downloadCertificate,
                   child: const Text('Download Certificate'),
                 ),
               ],
-            ]
+            ],
+            if (currentEvent.participants != null && currentEvent.participants!.isNotEmpty) ...[
+              const SizedBox(height: 24),
+              const Text('Participants', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 8),
+              ...currentEvent.participants!.map((user) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.person, size: 16),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(user.name),
+                              if (user.joinedAt != null)
+                                Text('Joined: ${user.joinedAt!.toString().substring(0, 16)}', style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
+            ],
           ],
         ),
       ),

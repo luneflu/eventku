@@ -20,6 +20,9 @@ _Event _$EventFromJson(Map<String, dynamic> json) => _Event(
   organizer: json['organizer'] == null
       ? null
       : User.fromJson(json['organizer'] as Map<String, dynamic>),
+  participants: (json['participants'] as List<dynamic>?)
+      ?.map((e) => User.fromJson(e as Map<String, dynamic>))
+      .toList(),
 );
 
 Map<String, dynamic> _$EventToJson(_Event instance) => <String, dynamic>{
@@ -34,4 +37,5 @@ Map<String, dynamic> _$EventToJson(_Event instance) => <String, dynamic>{
   'max_capacity': instance.maxCapacity,
   'registration_deadline': instance.registrationDeadline.toIso8601String(),
   'organizer': instance.organizer,
+  'participants': instance.participants,
 };

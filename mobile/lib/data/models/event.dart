@@ -18,6 +18,7 @@ abstract class Event with _$Event {
     @JsonKey(name: 'max_capacity') required int maxCapacity,
     @JsonKey(name: 'registration_deadline') required DateTime registrationDeadline,
     User? organizer,
+    List<User>? participants,
   }) = _Event;
 
   factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);

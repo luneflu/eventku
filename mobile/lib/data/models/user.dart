@@ -9,6 +9,7 @@ abstract class User with _$User {
     required int id,
     required String name,
     required String email,
+    @JsonKey(name: 'joined_at') DateTime? joinedAt,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

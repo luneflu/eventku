@@ -11,6 +11,7 @@ class UserData extends Data
         public int $id,
         public string $name,
         public string $email,
+        public ?string $joined_at = null,
     ) {}
 
     public static function fromModel(User $user): self
@@ -19,6 +20,7 @@ class UserData extends Data
             id: $user->id,
             name: $user->name,
             email: $user->email,
+            joined_at: $user->pivot ? $user->pivot->created_at?->toIso8601String() : null,
         );
     }
 }
