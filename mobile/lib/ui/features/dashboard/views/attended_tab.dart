@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forui/forui.dart';
 import 'package:go_router/go_router.dart';
-import '../../providers/event_provider.dart';
+import '../../events/view_models/events_view_model.dart';
 
 class AttendedTab extends ConsumerWidget {
   const AttendedTab({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final participationsAsync = ref.watch(myParticipationsProvider);
+    final participationsAsync = ref.watch(attendedEventsViewModelProvider);
 
     return participationsAsync.when(
       data: (events) {

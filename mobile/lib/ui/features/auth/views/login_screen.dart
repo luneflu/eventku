@@ -2,26 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forui/forui.dart';
 import 'package:go_router/go_router.dart';
-import '../providers/auth_provider.dart';
+import '../view_models/auth_view_model.dart';
 
-import '../utils/error_handler.dart';
+import '../../../../ui/core/utils/error_handler.dart';
 
-class RegisterScreen extends ConsumerStatefulWidget {
-  const RegisterScreen({super.key});
+class LoginScreen extends ConsumerStatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _RegisterScreenState extends ConsumerState<RegisterScreen> {
-  final _nameController = TextEditingController();
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   String? _errorMessage;
 
   @override
   void dispose() {
-    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -32,26 +30,18 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       _errorMessage = null;
     });
 
-    final name = _nameController.text.trim();
     final email = _emailController.text.trim();
     final password = _passwordController.text;
 
-    if (name.isEmpty || email.isEmpty || password.isEmpty) {
+    if (email.isEmpty || password.isEmpty) {
       setState(() {
         _errorMessage = 'All fields are required';
       });
       return;
     }
 
-    if (password.length < 8) {
-      setState(() {
-        _errorMessage = 'Password must be at least 8 characters long';
-      });
-      return;
-    }
-
     try {
-      await ref.read(authProvider.notifier).register(name, email, password);
+      await ref.read(authViewModelProvider.notifier).login(email, password);
       // Success will automatically trigger GoRouter redirect to /dashboard
     } catch (e) {
       setState(() {
@@ -62,7 +52,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authProvider);
+    final authState = ref.watch(authViewModelProvider);
     final isLoading = authState.isLoading;
 
     String? displayError = _errorMessage;
@@ -71,21 +61,15 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     }
 
     return FScaffold(
-      header: FHeader.nested(
+      header: FHeader(
         title: Text(
-          'Register',
+          'Sign In',
           style: TextStyle(
             color: context.theme.colors.foreground,
-            fontSize: 20,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
-        prefixes: [
-          FButton.icon(
-            onPress: () => context.pop(),
-            child: Icon(FIcons.arrowLeft),
-          ),
-        ],
       ),
       child: Center(
         child: SingleChildScrollView(
@@ -96,7 +80,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'Create Account',
+                  'Welcome to Eventku',
                   style: TextStyle(
                     color: context.theme.colors.primary,
                     fontSize: 32,
@@ -106,7 +90,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Join Eventku to start hosting and participating in events',
+                  'Access your event management panel',
                   style: TextStyle(
                     color: context.theme.colors.mutedForeground,
                     fontSize: 16,
@@ -114,12 +98,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 32),
-                FTextField(
-                  control: FTextFieldControl.managed(controller: _nameController),
-                  label: const Text('Full Name'),
-                  hint: 'Enter your name',
-                ),
-                const SizedBox(height: 16),
                 FTextField(
                   control: FTextFieldControl.managed(controller: _emailController),
                   label: const Text('Email Address'),
@@ -130,7 +108,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 FTextField.password(
                   control: FTextFieldControl.managed(controller: _passwordController),
                   label: const Text('Password'),
-                  hint: 'Enter your password (min 8 chars)',
+                  hint: 'Enter your password',
                 ),
                 if (displayError != null) ...[
                   const SizedBox(height: 16),
@@ -147,20 +125,20 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 const SizedBox(height: 24),
                 FButton(
                   onPress: isLoading ? null : _submit,
-                  child: Text(isLoading ? 'Creating Account...' : 'Register'),
+                  child: Text(isLoading ? 'Signing In...' : 'Sign In'),
                 ),
                 const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Already have an account? ",
+                      "Don't have an account? ",
                       style: TextStyle(color: context.theme.colors.mutedForeground),
                     ),
                     GestureDetector(
-                      onTap: () => context.pop(),
+                      onTap: () => context.push('/register'),
                       child: Text(
-                        'Sign In',
+                        'Register',
                         style: TextStyle(
                           color: context.theme.colors.primary,
                           fontWeight: FontWeight.bold,

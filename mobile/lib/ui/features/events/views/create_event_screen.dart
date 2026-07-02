@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forui/forui.dart';
-import '../providers/auth_provider.dart';
-import '../providers/event_provider.dart';
+import '../view_models/create_event_view_model.dart';
 import 'package:go_router/go_router.dart';
 
-import '../utils/error_handler.dart';
+import '../../../core/utils/error_handler.dart';
 
 class CreateEventScreen extends ConsumerStatefulWidget {
   const CreateEventScreen({super.key});
@@ -19,41 +18,35 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
   final _descriptionController = TextEditingController();
   final _locationController = TextEditingController();
   DateTime _selectedDate = DateTime.now().add(const Duration(days: 7));
-  bool _isLoading = false;
-  String? _errorMessage;
 
   Future<void> _submit() async {
     if (_titleController.text.isEmpty || _locationController.text.isEmpty) return;
 
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
+    await ref.read(createEventViewModelProvider.notifier).create({
+      'title': _titleController.text,
+      'description': _descriptionController.text,
+      'location': _locationController.text,
+      'date': _selectedDate.toIso8601String(),
+      'max_capacity': 100, // standard default
+      'registration_deadline': _selectedDate.subtract(const Duration(days: 1)).toIso8601String(),
     });
-    try {
-      final api = ref.read(apiServiceProvider);
-      await api.createEvent({
-        'title': _titleController.text,
-        'description': _descriptionController.text,
-        'location': _locationController.text,
-        'date': _selectedDate.toIso8601String(),
-        'max_capacity': 100, // standard default
-        'registration_deadline': _selectedDate.subtract(const Duration(days: 1)).toIso8601String(),
-      });
-      ref.invalidate(myEventsProvider);
-      if (mounted) context.pop();
-    } catch (e) {
+
+    final state = ref.read(createEventViewModelProvider);
+    if (state.hasError) {
       if (mounted) {
-        setState(() {
-          _errorMessage = extractErrorMessage(e);
-        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(extractErrorMessage(state.error))),
+        );
       }
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
+    } else {
+      if (mounted) context.pop();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final stateAsync = ref.watch(createEventViewModelProvider);
+
     return FScaffold(
       header: FHeader(
         title: const Text('Create Event'),
@@ -99,18 +92,10 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
                 }
               },
             ),
-            if (_errorMessage != null) ...[
-              const SizedBox(height: 16),
-              FAlert(
-                title: const Text('Error'),
-                subtitle: Text(_errorMessage!),
-                style: context.theme.alertStyles.destructive,
-              ),
-            ],
             const SizedBox(height: 32),
             FButton(
-              onPress: _isLoading ? null : _submit,
-              child: _isLoading ? const CircularProgressIndicator() : const Text('Create Event'),
+              onPress: stateAsync.isLoading ? null : _submit,
+              child: stateAsync.isLoading ? const CircularProgressIndicator() : const Text('Create Event'),
             ),
           ],
         ),
@@ -118,3 +103,4 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
     );
   }
 }
+

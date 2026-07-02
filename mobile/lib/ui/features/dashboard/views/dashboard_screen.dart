@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forui/forui.dart';
-import '../providers/auth_provider.dart';
-import 'tabs/home_tab.dart';
-import 'tabs/scan_tab.dart';
-import 'tabs/attended_tab.dart';
-import 'tabs/created_tab.dart';
+import '../../auth/view_models/auth_view_model.dart';
+import 'home_tab.dart';
+import '../../scan/views/scan_tab.dart';
+import 'attended_tab.dart';
+import 'created_tab.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
@@ -40,7 +40,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           FHeaderAction(
             icon: Icon(FIcons.logOut),
             onPress: () async {
-              await ref.read(authProvider.notifier).logout();
+              await ref.read(authViewModelProvider.notifier).logout();
             },
           ),
         ],

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forui/forui.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import '../../providers/auth_provider.dart';
+import '../view_models/scan_view_model.dart';
 
-import '../../utils/error_handler.dart';
+import '../../../core/utils/error_handler.dart';
 
 class ScanTab extends ConsumerStatefulWidget {
   const ScanTab({super.key});
@@ -15,10 +15,6 @@ class ScanTab extends ConsumerStatefulWidget {
 
 class _ScanTabState extends ConsumerState<ScanTab> {
   final MobileScannerController _scannerController = MobileScannerController();
-  bool _isScanning = true;
-  bool _isLoading = false;
-  String? _errorMessage;
-  String? _successMessage;
 
   @override
   void dispose() {
@@ -27,7 +23,8 @@ class _ScanTabState extends ConsumerState<ScanTab> {
   }
 
   Future<void> _handleBarcode(BarcodeCapture capture) async {
-    if (!_isScanning) return;
+    final state = ref.read(scanViewModelProvider).value;
+    if (state == null || !state.isScanning) return;
     
     final List<Barcode> barcodes = capture.barcodes;
     if (barcodes.isEmpty) return;
@@ -35,43 +32,17 @@ class _ScanTabState extends ConsumerState<ScanTab> {
     final String? code = barcodes.first.rawValue;
     if (code == null) return;
 
-    setState(() {
-      _isScanning = false;
-      _isLoading = true;
-      _errorMessage = null;
-      _successMessage = null;
-    });
-
     try {
-      final api = ref.read(apiServiceProvider);
-      await api.attendByToken({'qr_token': code});
-      
-      if (mounted) {
-        setState(() {
-          _successMessage = 'Attendance recorded successfully!';
-        });
-      }
+      await ref.read(scanViewModelProvider.notifier).attendByToken(code);
     } catch (e) {
-      if (mounted) {
-        setState(() {
-          _errorMessage = extractErrorMessage(e);
-        });
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-          // Add delay before allowing next scan to avoid spam
-          Future.delayed(const Duration(seconds: 2), () {
-            if (mounted) setState(() => _isScanning = true);
-          });
-        });
-      }
+      ref.read(scanViewModelProvider.notifier).setError(extractErrorMessage(e));
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final scanStateAsync = ref.watch(scanViewModelProvider);
+
     return Column(
       children: [
         const Padding(
@@ -85,29 +56,29 @@ class _ScanTabState extends ConsumerState<ScanTab> {
                 controller: _scannerController,
                 onDetect: _handleBarcode,
               ),
-              if (_isLoading)
+              if (scanStateAsync.isLoading)
                 const Center(
                   child: CircularProgressIndicator(),
                 )
-              else if (_errorMessage != null)
+              else if (scanStateAsync.value?.errorMessage != null)
                 Positioned(
                   bottom: 24,
                   left: 16,
                   right: 16,
                   child: FAlert(
                     title: const Text('Error'),
-                    subtitle: Text(_errorMessage!),
+                    subtitle: Text(scanStateAsync.value!.errorMessage!),
                     style: context.theme.alertStyles.destructive,
                   ),
                 )
-              else if (_successMessage != null)
+              else if (scanStateAsync.value?.successMessage != null)
                 Positioned(
                   bottom: 24,
                   left: 16,
                   right: 16,
                   child: FAlert(
                     title: const Text('Success'),
-                    subtitle: Text(_successMessage!),
+                    subtitle: Text(scanStateAsync.value!.successMessage!),
                     style: context.theme.alertStyles.primary,
                   ),
                 ),
@@ -118,3 +89,4 @@ class _ScanTabState extends ConsumerState<ScanTab> {
     );
   }
 }
+

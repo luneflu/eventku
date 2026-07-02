@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forui/forui.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'navigation/router.dart';
-import 'theme.dart';
+import 'ui/core/theme/theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,3 +33,4 @@ class MyApp extends ConsumerWidget {
     );
   }
 }
+

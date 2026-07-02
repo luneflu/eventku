@@ -1,15 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../providers/auth_provider.dart';
-import '../screens/login_screen.dart';
-import '../screens/register_screen.dart';
-import '../screens/dashboard_screen.dart';
-import '../screens/create_event_screen.dart';
-import '../screens/event_details_screen.dart';
-import '../models/event.dart';
+import '../ui/features/auth/view_models/auth_view_model.dart';
+import '../ui/features/auth/views/login_screen.dart';
+import '../ui/features/auth/views/register_screen.dart';
+import '../ui/features/dashboard/views/dashboard_screen.dart';
+import '../ui/features/events/views/create_event_screen.dart';
+import '../ui/features/events/views/event_details_screen.dart';
+import '../data/models/event.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
-  final authState = ref.watch(authProvider);
+  final authState = ref.watch(authViewModelProvider);
 
   return GoRouter(
     initialLocation: '/login',
@@ -52,3 +52,4 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
+

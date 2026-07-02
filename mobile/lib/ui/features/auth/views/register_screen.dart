@@ -2,24 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forui/forui.dart';
 import 'package:go_router/go_router.dart';
-import '../providers/auth_provider.dart';
+import '../view_models/auth_view_model.dart';
 
-import '../utils/error_handler.dart';
+import '../../../../ui/core/utils/error_handler.dart';
 
-class LoginScreen extends ConsumerStatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends ConsumerStatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen> {
+class _RegisterScreenState extends ConsumerState<RegisterScreen> {
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   String? _errorMessage;
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -30,18 +32,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       _errorMessage = null;
     });
 
+    final name = _nameController.text.trim();
     final email = _emailController.text.trim();
     final password = _passwordController.text;
 
-    if (email.isEmpty || password.isEmpty) {
+    if (name.isEmpty || email.isEmpty || password.isEmpty) {
       setState(() {
         _errorMessage = 'All fields are required';
       });
       return;
     }
 
+    if (password.length < 8) {
+      setState(() {
+        _errorMessage = 'Password must be at least 8 characters long';
+      });
+      return;
+    }
+
     try {
-      await ref.read(authProvider.notifier).login(email, password);
+      await ref.read(authViewModelProvider.notifier).register(name, email, password);
       // Success will automatically trigger GoRouter redirect to /dashboard
     } catch (e) {
       setState(() {
@@ -52,7 +62,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authProvider);
+    final authState = ref.watch(authViewModelProvider);
     final isLoading = authState.isLoading;
 
     String? displayError = _errorMessage;
@@ -61,15 +71,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
 
     return FScaffold(
-      header: FHeader(
+      header: FHeader.nested(
         title: Text(
-          'Sign In',
+          'Register',
           style: TextStyle(
             color: context.theme.colors.foreground,
-            fontSize: 24,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
+        prefixes: [
+          FButton.icon(
+            onPress: () => context.pop(),
+            child: Icon(FIcons.arrowLeft),
+          ),
+        ],
       ),
       child: Center(
         child: SingleChildScrollView(
@@ -80,7 +96,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'Welcome to Eventku',
+                  'Create Account',
                   style: TextStyle(
                     color: context.theme.colors.primary,
                     fontSize: 32,
@@ -90,7 +106,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Access your event management panel',
+                  'Join Eventku to start hosting and participating in events',
                   style: TextStyle(
                     color: context.theme.colors.mutedForeground,
                     fontSize: 16,
@@ -98,6 +114,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 32),
+                FTextField(
+                  control: FTextFieldControl.managed(controller: _nameController),
+                  label: const Text('Full Name'),
+                  hint: 'Enter your name',
+                ),
+                const SizedBox(height: 16),
                 FTextField(
                   control: FTextFieldControl.managed(controller: _emailController),
                   label: const Text('Email Address'),
@@ -108,7 +130,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 FTextField.password(
                   control: FTextFieldControl.managed(controller: _passwordController),
                   label: const Text('Password'),
-                  hint: 'Enter your password',
+                  hint: 'Enter your password (min 8 chars)',
                 ),
                 if (displayError != null) ...[
                   const SizedBox(height: 16),
@@ -125,20 +147,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(height: 24),
                 FButton(
                   onPress: isLoading ? null : _submit,
-                  child: Text(isLoading ? 'Signing In...' : 'Sign In'),
+                  child: Text(isLoading ? 'Creating Account...' : 'Register'),
                 ),
                 const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Don't have an account? ",
+                      "Already have an account? ",
                       style: TextStyle(color: context.theme.colors.mutedForeground),
                     ),
                     GestureDetector(
-                      onTap: () => context.push('/register'),
+                      onTap: () => context.pop(),
                       child: Text(
-                        'Register',
+                        'Sign In',
                         style: TextStyle(
                           color: context.theme.colors.primary,
                           fontWeight: FontWeight.bold,
