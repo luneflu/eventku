@@ -8,7 +8,7 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepository(
     apiClient: ref.watch(apiServiceProvider),
     secureStorage: const FlutterSecureStorage(
-      mOptions: MacOsOptions(usesDataProtectionKeychain: true),
+      mOptions: MacOsOptions(usesDataProtectionKeychain: false),
     ),
   );
 });
@@ -20,8 +20,8 @@ class AuthRepository {
   AuthRepository({
     required ApiService apiClient,
     required FlutterSecureStorage secureStorage,
-  })  : _apiClient = apiClient,
-        _secureStorage = secureStorage;
+  }) : _apiClient = apiClient,
+       _secureStorage = secureStorage;
 
   Future<User?> getUserProfile() async {
     final token = await _secureStorage.read(key: 'auth_token');
@@ -36,7 +36,10 @@ class AuthRepository {
   }
 
   Future<User> login(String email, String password) async {
-    final response = await _apiClient.login({'email': email, 'password': password});
+    final response = await _apiClient.login({
+      'email': email,
+      'password': password,
+    });
     await _secureStorage.write(key: 'auth_token', value: response.token);
     return response.user;
   }
