@@ -30,7 +30,10 @@ class MyApp extends ConsumerWidget {
         data: MediaQuery.platformBrightnessOf(context) == Brightness.dark 
             ? friendlyDarkTheme 
             : friendlyLightTheme,
-        child: child!,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: child!,
+        ),
       ),
     );
   }
