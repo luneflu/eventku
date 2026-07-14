@@ -175,7 +175,7 @@ class _EventDetailsScreenState extends ConsumerState<EventDetailsScreen> {
                             children: [
                               Text(user.name),
                               if (user.joinedAt != null)
-                                Text('Joined: ${user.joinedAt!.toString().substring(0, 16)}', style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                                Text('Joined: ${user.joinedAt!.toString().substring(0, 16)}', style: TextStyle(fontSize: 12, color: context.theme.colors.mutedForeground)),
                             ],
                           ),
                         ),

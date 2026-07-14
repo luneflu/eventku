@@ -27,8 +27,13 @@ class MyApp extends ConsumerWidget {
       routerConfig: router,
       debugShowCheckedModeBanner: false,
       builder: (context, child) => FTheme(
-        data: noirGoldTheme,
-        child: child!,
+        data: MediaQuery.platformBrightnessOf(context) == Brightness.dark 
+            ? friendlyDarkTheme 
+            : friendlyLightTheme,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: child!,
+        ),
       ),
     );
   }
