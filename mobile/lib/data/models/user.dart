@@ -10,6 +10,8 @@ abstract class User with _$User {
     required String name,
     required String email,
     @JsonKey(name: 'joined_at') DateTime? joinedAt,
+    @Default('user') String role,
+    @JsonKey(name: 'is_banned') @Default(false) bool isBanned,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

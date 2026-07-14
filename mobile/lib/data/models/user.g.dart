@@ -13,6 +13,8 @@ _User _$UserFromJson(Map<String, dynamic> json) => _User(
   joinedAt: json['joined_at'] == null
       ? null
       : DateTime.parse(json['joined_at'] as String),
+  role: json['role'] as String? ?? 'user',
+  isBanned: json['is_banned'] as bool? ?? false,
 );
 
 Map<String, dynamic> _$UserToJson(_User instance) => <String, dynamic>{
@@ -20,4 +22,6 @@ Map<String, dynamic> _$UserToJson(_User instance) => <String, dynamic>{
   'name': instance.name,
   'email': instance.email,
   'joined_at': instance.joinedAt?.toIso8601String(),
+  'role': instance.role,
+  'is_banned': instance.isBanned,
 };

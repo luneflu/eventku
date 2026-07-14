@@ -67,4 +67,16 @@ abstract class ApiService {
 
   @POST("/attend-by-token")
   Future<void> attendByToken(@Body() Map<String, dynamic> body);
+
+  @GET("/admin/users")
+  Future<PaginatedResponse<User>> getAdminUsers();
+
+  @POST("/admin/users/{id}/toggle-ban")
+  Future<User> toggleUserBan(@Path("id") int id);
+
+  @GET("/admin/events")
+  Future<PaginatedResponse<Event>> getAdminEvents();
+
+  @POST("/admin/events/{id}/toggle-ban")
+  Future<Event> toggleEventBan(@Path("id") int id);
 }

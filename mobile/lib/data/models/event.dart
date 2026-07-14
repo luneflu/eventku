@@ -14,6 +14,7 @@ abstract class Event with _$Event {
     required String location,
     @JsonKey(name: 'organizer_id') required int organizerId,
     required String status,
+    @JsonKey(name: 'is_banned') @Default(false) bool isBanned,
     @JsonKey(name: 'qr_token') String? qrToken,
     @JsonKey(name: 'max_capacity') required int maxCapacity,
     @JsonKey(name: 'registration_deadline') required DateTime registrationDeadline,

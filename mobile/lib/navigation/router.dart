@@ -4,6 +4,7 @@ import '../ui/features/auth/view_models/auth_view_model.dart';
 import '../ui/features/auth/views/login_screen.dart';
 import '../ui/features/auth/views/register_screen.dart';
 import '../ui/features/dashboard/views/dashboard_screen.dart';
+import '../ui/features/admin/views/admin_dashboard_screen.dart';
 import '../ui/features/events/views/create_event_screen.dart';
 import '../ui/features/events/views/event_details_screen.dart';
 import '../data/models/event.dart';
@@ -21,8 +22,17 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         return '/login';
       }
       if (loggedIn && loggingIn) {
+        if (authState.value?.role == 'admin') {
+          return '/admin';
+        }
         return '/dashboard';
       }
+      
+      // Protect admin routes
+      if (loggedIn && state.matchedLocation.startsWith('/admin') && authState.value?.role != 'admin') {
+        return '/dashboard';
+      }
+
       return null;
     },
     routes: [
@@ -37,6 +47,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/dashboard',
         builder: (context, state) => const DashboardScreen(),
+      ),
+      GoRoute(
+        path: '/admin',
+        builder: (context, state) => const AdminDashboardScreen(),
       ),
       GoRoute(
         path: '/create-event',

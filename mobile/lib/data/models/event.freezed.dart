@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Event {
 
- int get id; String get title; String get description; DateTime get date; String get location;@JsonKey(name: 'organizer_id') int get organizerId; String get status;@JsonKey(name: 'qr_token') String? get qrToken;@JsonKey(name: 'max_capacity') int get maxCapacity;@JsonKey(name: 'registration_deadline') DateTime get registrationDeadline; User? get organizer; List<User>? get participants;
+ int get id; String get title; String get description; DateTime get date; String get location;@JsonKey(name: 'organizer_id') int get organizerId; String get status;@JsonKey(name: 'is_banned') bool get isBanned;@JsonKey(name: 'qr_token') String? get qrToken;@JsonKey(name: 'max_capacity') int get maxCapacity;@JsonKey(name: 'registration_deadline') DateTime get registrationDeadline; User? get organizer; List<User>? get participants;
 /// Create a copy of Event
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $EventCopyWith<Event> get copyWith => _$EventCopyWithImpl<Event>(this as Event, 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Event&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.date, date) || other.date == date)&&(identical(other.location, location) || other.location == location)&&(identical(other.organizerId, organizerId) || other.organizerId == organizerId)&&(identical(other.status, status) || other.status == status)&&(identical(other.qrToken, qrToken) || other.qrToken == qrToken)&&(identical(other.maxCapacity, maxCapacity) || other.maxCapacity == maxCapacity)&&(identical(other.registrationDeadline, registrationDeadline) || other.registrationDeadline == registrationDeadline)&&(identical(other.organizer, organizer) || other.organizer == organizer)&&const DeepCollectionEquality().equals(other.participants, participants));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Event&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.date, date) || other.date == date)&&(identical(other.location, location) || other.location == location)&&(identical(other.organizerId, organizerId) || other.organizerId == organizerId)&&(identical(other.status, status) || other.status == status)&&(identical(other.isBanned, isBanned) || other.isBanned == isBanned)&&(identical(other.qrToken, qrToken) || other.qrToken == qrToken)&&(identical(other.maxCapacity, maxCapacity) || other.maxCapacity == maxCapacity)&&(identical(other.registrationDeadline, registrationDeadline) || other.registrationDeadline == registrationDeadline)&&(identical(other.organizer, organizer) || other.organizer == organizer)&&const DeepCollectionEquality().equals(other.participants, participants));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,description,date,location,organizerId,status,qrToken,maxCapacity,registrationDeadline,organizer,const DeepCollectionEquality().hash(participants));
+int get hashCode => Object.hash(runtimeType,id,title,description,date,location,organizerId,status,isBanned,qrToken,maxCapacity,registrationDeadline,organizer,const DeepCollectionEquality().hash(participants));
 
 @override
 String toString() {
-  return 'Event(id: $id, title: $title, description: $description, date: $date, location: $location, organizerId: $organizerId, status: $status, qrToken: $qrToken, maxCapacity: $maxCapacity, registrationDeadline: $registrationDeadline, organizer: $organizer, participants: $participants)';
+  return 'Event(id: $id, title: $title, description: $description, date: $date, location: $location, organizerId: $organizerId, status: $status, isBanned: $isBanned, qrToken: $qrToken, maxCapacity: $maxCapacity, registrationDeadline: $registrationDeadline, organizer: $organizer, participants: $participants)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $EventCopyWith<$Res>  {
   factory $EventCopyWith(Event value, $Res Function(Event) _then) = _$EventCopyWithImpl;
 @useResult
 $Res call({
- int id, String title, String description, DateTime date, String location,@JsonKey(name: 'organizer_id') int organizerId, String status,@JsonKey(name: 'qr_token') String? qrToken,@JsonKey(name: 'max_capacity') int maxCapacity,@JsonKey(name: 'registration_deadline') DateTime registrationDeadline, User? organizer, List<User>? participants
+ int id, String title, String description, DateTime date, String location,@JsonKey(name: 'organizer_id') int organizerId, String status,@JsonKey(name: 'is_banned') bool isBanned,@JsonKey(name: 'qr_token') String? qrToken,@JsonKey(name: 'max_capacity') int maxCapacity,@JsonKey(name: 'registration_deadline') DateTime registrationDeadline, User? organizer, List<User>? participants
 });
 
 
@@ -65,7 +65,7 @@ class _$EventCopyWithImpl<$Res>
 
 /// Create a copy of Event
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? description = null,Object? date = null,Object? location = null,Object? organizerId = null,Object? status = null,Object? qrToken = freezed,Object? maxCapacity = null,Object? registrationDeadline = null,Object? organizer = freezed,Object? participants = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? description = null,Object? date = null,Object? location = null,Object? organizerId = null,Object? status = null,Object? isBanned = null,Object? qrToken = freezed,Object? maxCapacity = null,Object? registrationDeadline = null,Object? organizer = freezed,Object? participants = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
@@ -74,7 +74,8 @@ as String,date: null == date ? _self.date : date // ignore: cast_nullable_to_non
 as DateTime,location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
 as String,organizerId: null == organizerId ? _self.organizerId : organizerId // ignore: cast_nullable_to_non_nullable
 as int,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as String,qrToken: freezed == qrToken ? _self.qrToken : qrToken // ignore: cast_nullable_to_non_nullable
+as String,isBanned: null == isBanned ? _self.isBanned : isBanned // ignore: cast_nullable_to_non_nullable
+as bool,qrToken: freezed == qrToken ? _self.qrToken : qrToken // ignore: cast_nullable_to_non_nullable
 as String?,maxCapacity: null == maxCapacity ? _self.maxCapacity : maxCapacity // ignore: cast_nullable_to_non_nullable
 as int,registrationDeadline: null == registrationDeadline ? _self.registrationDeadline : registrationDeadline // ignore: cast_nullable_to_non_nullable
 as DateTime,organizer: freezed == organizer ? _self.organizer : organizer // ignore: cast_nullable_to_non_nullable
@@ -176,10 +177,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String title,  String description,  DateTime date,  String location, @JsonKey(name: 'organizer_id')  int organizerId,  String status, @JsonKey(name: 'qr_token')  String? qrToken, @JsonKey(name: 'max_capacity')  int maxCapacity, @JsonKey(name: 'registration_deadline')  DateTime registrationDeadline,  User? organizer,  List<User>? participants)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String title,  String description,  DateTime date,  String location, @JsonKey(name: 'organizer_id')  int organizerId,  String status, @JsonKey(name: 'is_banned')  bool isBanned, @JsonKey(name: 'qr_token')  String? qrToken, @JsonKey(name: 'max_capacity')  int maxCapacity, @JsonKey(name: 'registration_deadline')  DateTime registrationDeadline,  User? organizer,  List<User>? participants)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Event() when $default != null:
-return $default(_that.id,_that.title,_that.description,_that.date,_that.location,_that.organizerId,_that.status,_that.qrToken,_that.maxCapacity,_that.registrationDeadline,_that.organizer,_that.participants);case _:
+return $default(_that.id,_that.title,_that.description,_that.date,_that.location,_that.organizerId,_that.status,_that.isBanned,_that.qrToken,_that.maxCapacity,_that.registrationDeadline,_that.organizer,_that.participants);case _:
   return orElse();
 
 }
@@ -197,10 +198,10 @@ return $default(_that.id,_that.title,_that.description,_that.date,_that.location
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String title,  String description,  DateTime date,  String location, @JsonKey(name: 'organizer_id')  int organizerId,  String status, @JsonKey(name: 'qr_token')  String? qrToken, @JsonKey(name: 'max_capacity')  int maxCapacity, @JsonKey(name: 'registration_deadline')  DateTime registrationDeadline,  User? organizer,  List<User>? participants)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String title,  String description,  DateTime date,  String location, @JsonKey(name: 'organizer_id')  int organizerId,  String status, @JsonKey(name: 'is_banned')  bool isBanned, @JsonKey(name: 'qr_token')  String? qrToken, @JsonKey(name: 'max_capacity')  int maxCapacity, @JsonKey(name: 'registration_deadline')  DateTime registrationDeadline,  User? organizer,  List<User>? participants)  $default,) {final _that = this;
 switch (_that) {
 case _Event():
-return $default(_that.id,_that.title,_that.description,_that.date,_that.location,_that.organizerId,_that.status,_that.qrToken,_that.maxCapacity,_that.registrationDeadline,_that.organizer,_that.participants);case _:
+return $default(_that.id,_that.title,_that.description,_that.date,_that.location,_that.organizerId,_that.status,_that.isBanned,_that.qrToken,_that.maxCapacity,_that.registrationDeadline,_that.organizer,_that.participants);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -217,10 +218,10 @@ return $default(_that.id,_that.title,_that.description,_that.date,_that.location
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String title,  String description,  DateTime date,  String location, @JsonKey(name: 'organizer_id')  int organizerId,  String status, @JsonKey(name: 'qr_token')  String? qrToken, @JsonKey(name: 'max_capacity')  int maxCapacity, @JsonKey(name: 'registration_deadline')  DateTime registrationDeadline,  User? organizer,  List<User>? participants)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String title,  String description,  DateTime date,  String location, @JsonKey(name: 'organizer_id')  int organizerId,  String status, @JsonKey(name: 'is_banned')  bool isBanned, @JsonKey(name: 'qr_token')  String? qrToken, @JsonKey(name: 'max_capacity')  int maxCapacity, @JsonKey(name: 'registration_deadline')  DateTime registrationDeadline,  User? organizer,  List<User>? participants)?  $default,) {final _that = this;
 switch (_that) {
 case _Event() when $default != null:
-return $default(_that.id,_that.title,_that.description,_that.date,_that.location,_that.organizerId,_that.status,_that.qrToken,_that.maxCapacity,_that.registrationDeadline,_that.organizer,_that.participants);case _:
+return $default(_that.id,_that.title,_that.description,_that.date,_that.location,_that.organizerId,_that.status,_that.isBanned,_that.qrToken,_that.maxCapacity,_that.registrationDeadline,_that.organizer,_that.participants);case _:
   return null;
 
 }
@@ -232,7 +233,7 @@ return $default(_that.id,_that.title,_that.description,_that.date,_that.location
 @JsonSerializable()
 
 class _Event implements Event {
-  const _Event({required this.id, required this.title, required this.description, required this.date, required this.location, @JsonKey(name: 'organizer_id') required this.organizerId, required this.status, @JsonKey(name: 'qr_token') this.qrToken, @JsonKey(name: 'max_capacity') required this.maxCapacity, @JsonKey(name: 'registration_deadline') required this.registrationDeadline, this.organizer, final  List<User>? participants}): _participants = participants;
+  const _Event({required this.id, required this.title, required this.description, required this.date, required this.location, @JsonKey(name: 'organizer_id') required this.organizerId, required this.status, @JsonKey(name: 'is_banned') this.isBanned = false, @JsonKey(name: 'qr_token') this.qrToken, @JsonKey(name: 'max_capacity') required this.maxCapacity, @JsonKey(name: 'registration_deadline') required this.registrationDeadline, this.organizer, final  List<User>? participants}): _participants = participants;
   factory _Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
 
 @override final  int id;
@@ -242,6 +243,7 @@ class _Event implements Event {
 @override final  String location;
 @override@JsonKey(name: 'organizer_id') final  int organizerId;
 @override final  String status;
+@override@JsonKey(name: 'is_banned') final  bool isBanned;
 @override@JsonKey(name: 'qr_token') final  String? qrToken;
 @override@JsonKey(name: 'max_capacity') final  int maxCapacity;
 @override@JsonKey(name: 'registration_deadline') final  DateTime registrationDeadline;
@@ -269,16 +271,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Event&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.date, date) || other.date == date)&&(identical(other.location, location) || other.location == location)&&(identical(other.organizerId, organizerId) || other.organizerId == organizerId)&&(identical(other.status, status) || other.status == status)&&(identical(other.qrToken, qrToken) || other.qrToken == qrToken)&&(identical(other.maxCapacity, maxCapacity) || other.maxCapacity == maxCapacity)&&(identical(other.registrationDeadline, registrationDeadline) || other.registrationDeadline == registrationDeadline)&&(identical(other.organizer, organizer) || other.organizer == organizer)&&const DeepCollectionEquality().equals(other._participants, _participants));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Event&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.date, date) || other.date == date)&&(identical(other.location, location) || other.location == location)&&(identical(other.organizerId, organizerId) || other.organizerId == organizerId)&&(identical(other.status, status) || other.status == status)&&(identical(other.isBanned, isBanned) || other.isBanned == isBanned)&&(identical(other.qrToken, qrToken) || other.qrToken == qrToken)&&(identical(other.maxCapacity, maxCapacity) || other.maxCapacity == maxCapacity)&&(identical(other.registrationDeadline, registrationDeadline) || other.registrationDeadline == registrationDeadline)&&(identical(other.organizer, organizer) || other.organizer == organizer)&&const DeepCollectionEquality().equals(other._participants, _participants));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,description,date,location,organizerId,status,qrToken,maxCapacity,registrationDeadline,organizer,const DeepCollectionEquality().hash(_participants));
+int get hashCode => Object.hash(runtimeType,id,title,description,date,location,organizerId,status,isBanned,qrToken,maxCapacity,registrationDeadline,organizer,const DeepCollectionEquality().hash(_participants));
 
 @override
 String toString() {
-  return 'Event(id: $id, title: $title, description: $description, date: $date, location: $location, organizerId: $organizerId, status: $status, qrToken: $qrToken, maxCapacity: $maxCapacity, registrationDeadline: $registrationDeadline, organizer: $organizer, participants: $participants)';
+  return 'Event(id: $id, title: $title, description: $description, date: $date, location: $location, organizerId: $organizerId, status: $status, isBanned: $isBanned, qrToken: $qrToken, maxCapacity: $maxCapacity, registrationDeadline: $registrationDeadline, organizer: $organizer, participants: $participants)';
 }
 
 
@@ -289,7 +291,7 @@ abstract mixin class _$EventCopyWith<$Res> implements $EventCopyWith<$Res> {
   factory _$EventCopyWith(_Event value, $Res Function(_Event) _then) = __$EventCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String title, String description, DateTime date, String location,@JsonKey(name: 'organizer_id') int organizerId, String status,@JsonKey(name: 'qr_token') String? qrToken,@JsonKey(name: 'max_capacity') int maxCapacity,@JsonKey(name: 'registration_deadline') DateTime registrationDeadline, User? organizer, List<User>? participants
+ int id, String title, String description, DateTime date, String location,@JsonKey(name: 'organizer_id') int organizerId, String status,@JsonKey(name: 'is_banned') bool isBanned,@JsonKey(name: 'qr_token') String? qrToken,@JsonKey(name: 'max_capacity') int maxCapacity,@JsonKey(name: 'registration_deadline') DateTime registrationDeadline, User? organizer, List<User>? participants
 });
 
 
@@ -306,7 +308,7 @@ class __$EventCopyWithImpl<$Res>
 
 /// Create a copy of Event
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? description = null,Object? date = null,Object? location = null,Object? organizerId = null,Object? status = null,Object? qrToken = freezed,Object? maxCapacity = null,Object? registrationDeadline = null,Object? organizer = freezed,Object? participants = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? description = null,Object? date = null,Object? location = null,Object? organizerId = null,Object? status = null,Object? isBanned = null,Object? qrToken = freezed,Object? maxCapacity = null,Object? registrationDeadline = null,Object? organizer = freezed,Object? participants = freezed,}) {
   return _then(_Event(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
@@ -315,7 +317,8 @@ as String,date: null == date ? _self.date : date // ignore: cast_nullable_to_non
 as DateTime,location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
 as String,organizerId: null == organizerId ? _self.organizerId : organizerId // ignore: cast_nullable_to_non_nullable
 as int,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as String,qrToken: freezed == qrToken ? _self.qrToken : qrToken // ignore: cast_nullable_to_non_nullable
+as String,isBanned: null == isBanned ? _self.isBanned : isBanned // ignore: cast_nullable_to_non_nullable
+as bool,qrToken: freezed == qrToken ? _self.qrToken : qrToken // ignore: cast_nullable_to_non_nullable
 as String?,maxCapacity: null == maxCapacity ? _self.maxCapacity : maxCapacity // ignore: cast_nullable_to_non_nullable
 as int,registrationDeadline: null == registrationDeadline ? _self.registrationDeadline : registrationDeadline // ignore: cast_nullable_to_non_nullable
 as DateTime,organizer: freezed == organizer ? _self.organizer : organizer // ignore: cast_nullable_to_non_nullable

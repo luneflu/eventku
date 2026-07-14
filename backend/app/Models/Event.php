@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'location',
     'organizer_id',
     'status',
+    'is_banned',
     'qr_token',
     'max_capacity',
     'registration_deadline',
@@ -29,6 +30,7 @@ class Event extends Model
         return [
             'date' => 'datetime',
             'registration_deadline' => 'datetime',
+            'is_banned' => 'boolean',
         ];
     }
 

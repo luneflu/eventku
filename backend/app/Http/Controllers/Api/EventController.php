@@ -22,6 +22,10 @@ class EventController extends Controller
     {
         $events = QueryBuilder::for(Event::class)
             ->where('status', 'public')
+            ->where('is_banned', false)
+            ->whereHas('organizer', function ($query) {
+                $query->where('is_banned', false);
+            })
             ->allowedFilters('title', 'location')
             ->allowedSorts('date', 'created_at')
             ->defaultSort('date')

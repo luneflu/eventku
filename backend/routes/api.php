@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ParticipationController;
 use App\Http\Controllers\Api\CertificateController;
 use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\MyParticipationController;
+use App\Http\Controllers\Api\AdminController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -37,4 +38,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/my-participations', [MyParticipationController::class, 'index']);
 
     Route::post('/attend-by-token', [AttendanceController::class, 'attendByToken']);
+
+    Route::middleware('admin')->prefix('admin')->group(function () {
+        Route::get('/users', [AdminController::class, 'users']);
+        Route::post('/users/{user}/toggle-ban', [AdminController::class, 'toggleUserBan']);
+        Route::get('/events', [AdminController::class, 'events']);
+        Route::post('/events/{event}/toggle-ban', [AdminController::class, 'toggleEventBan']);
+    });
 });
