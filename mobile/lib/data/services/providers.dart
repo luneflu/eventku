@@ -15,7 +15,7 @@ final dioProvider = Provider<Dio>((ref) {
       onRequest: (options, handler) async {
         // Break dependency cycle by creating storage directly for the interceptor
         const storage = FlutterSecureStorage(
-          mOptions: MacOsOptions(usesDataProtectionKeychain: true),
+          mOptions: MacOsOptions(usesDataProtectionKeychain: false),
         );
         final token = await storage.read(key: 'auth_token');
         if (token != null) {
