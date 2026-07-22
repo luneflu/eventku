@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forui/forui.dart';
 import '../view_models/admin_events_view_model.dart';
+import '../../../core/widgets/event_card.dart';
 
 class AdminEventsTab extends ConsumerWidget {
   const AdminEventsTab({super.key});
@@ -15,30 +16,28 @@ class AdminEventsTab extends ConsumerWidget {
         if (events.isEmpty) {
           return const Center(child: Text('No events found.'));
         }
-        return ListView.builder(
+        return ListView.separated(
           itemCount: events.length,
           padding: const EdgeInsets.all(16),
+          separatorBuilder: (context, index) => const SizedBox(height: 16),
           itemBuilder: (context, index) {
             final event = events[index];
-            return FCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(event.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                  Text(event.date.toIso8601String().substring(0, 10)),
-                  const SizedBox(height: 8),
-                  Text('Status: ${event.status}'),
-                  Text('Organizer: ${event.organizer?.name ?? 'Unknown'}'),
-                  const SizedBox(height: 8),
-                  FButton(
-                    onPress: () {
-                      ref.read(adminEventsViewModelProvider.notifier).toggleEventBan(event.id);
-                    },
-                    variant: event.isBanned ? FButtonVariant.outline : FButtonVariant.destructive,
-                    child: Text(event.isBanned ? 'Unban Event' : 'Ban Event'),
-                  ),
-                ],
-              ),
+            return Column(
+              children: [
+                EventCard(
+                  event: event,
+                  index: index,
+                ),
+                const SizedBox(height: 8),
+                FButton(
+                  onPress: () {
+                    ref.read(adminEventsViewModelProvider.notifier).toggleEventBan(event.id);
+                  },
+                  variant: event.isBanned ? FButtonVariant.outline : FButtonVariant.destructive,
+                  child: Text(event.isBanned ? 'Unban Event' : 'Ban Event'),
+                ),
+                const SizedBox(height: 16),
+              ],
             );
           },
         );
