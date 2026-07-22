@@ -37,9 +37,15 @@ class CreatedTab extends ConsumerWidget {
                   return GestureDetector(
                     onTap: () => context.push('/event-details', extra: event),
                     child: FCard(
-                      title: Text(event.title),
-                      subtitle: Text('Status: ${event.status}'),
-                      child: Text(event.date.toString().substring(0, 10)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(event.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                          Text('Status: ${event.status}'),
+                          const SizedBox(height: 8),
+                          Text(event.date.toString().substring(0, 10)),
+                        ],
+                      ),
                     ),
                   );
                 },

@@ -34,9 +34,9 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
         ),
         suffixes: [
           FHeaderAction(
-            icon: Icon(FIcons.logOut),
-            onPress: () async {
-              await ref.read(authViewModelProvider.notifier).logout();
+            icon: Icon(Icons.logout),
+            onPress: () {
+              ref.read(authViewModelProvider.notifier).logout();
             },
           ),
         ],
@@ -50,11 +50,11 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
         },
         children: [
           FBottomNavigationBarItem(
-            icon: Icon(FIcons.users),
+            icon: Icon(Icons.people),
             label: const Text('Users'),
           ),
           FBottomNavigationBarItem(
-            icon: Icon(FIcons.calendar),
+            icon: Icon(Icons.calendar_month),
             label: const Text('Events'),
           ),
         ],

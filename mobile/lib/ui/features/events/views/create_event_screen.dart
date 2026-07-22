@@ -52,7 +52,7 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
         title: const Text('Create Event'),
         suffixes: [
           FHeaderAction(
-            icon: Icon(FIcons.chevronLeft),
+            icon: Icon(Icons.chevron_left),
             onPress: () => context.pop(),
           ),
         ],
