@@ -79,6 +79,7 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
             const SizedBox(height: 16),
             // Minimal date picker trigger
             FButton(
+              variant: FButtonVariant.outline,
               child: Text('Date: ${_selectedDate.toIso8601String().substring(0, 10)}'),
               onPress: () async {
                 final date = await showDatePicker(
@@ -93,9 +94,12 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
               },
             ),
             const SizedBox(height: 32),
-            FButton(
-              onPress: stateAsync.isLoading ? null : _submit,
-              child: stateAsync.isLoading ? const CircularProgressIndicator() : const Text('Create Event'),
+            SizedBox(
+              width: double.infinity,
+              child: FButton(
+                onPress: stateAsync.isLoading ? null : _submit,
+                child: stateAsync.isLoading ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2)) : const Text('Create Event'),
+              ),
             ),
           ],
         ),

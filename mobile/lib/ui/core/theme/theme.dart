@@ -43,15 +43,15 @@ final friendlyDarkColors = FColors(
 );
 
 final friendlyRadii = FBorderRadius(
-  xs2: BorderRadius.circular(8),
-  xs: BorderRadius.circular(8),
-  sm: BorderRadius.circular(9999),
-  md: BorderRadius.circular(9999),
-  lg: BorderRadius.circular(48),
-  xl: BorderRadius.circular(24),
-  xl2: BorderRadius.circular(24),
+  xs2: BorderRadius.circular(4),
+  xs: BorderRadius.circular(6),
+  sm: BorderRadius.circular(8),
+  md: BorderRadius.circular(12),
+  lg: BorderRadius.circular(16),
+  xl: BorderRadius.circular(16),
+  xl2: BorderRadius.circular(20),
   xl3: BorderRadius.circular(24),
-  pill: BorderRadius.circular(9999),
+  pill: BorderRadius.circular(12), // Adjusted to rounded square instead of pill
 );
 
 final _baseLight = FThemeData(colors: friendlyLightColors, touch: true);

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:forui/forui.dart';
-import 'package:go_router/go_router.dart';
 import '../../events/view_models/events_view_model.dart';
+import '../../../core/widgets/event_card.dart';
 
 class AttendedTab extends ConsumerWidget {
   const AttendedTab({super.key});
@@ -17,30 +16,17 @@ class AttendedTab extends ConsumerWidget {
           return const Center(child: Text('You are not participating in any events.'));
         }
         return ListView.separated(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(20),
           itemCount: events.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 16),
+          separatorBuilder: (context, index) => const SizedBox(height: 16),
           itemBuilder: (context, index) {
             final event = events[index];
-            return GestureDetector(
-              onTap: () => context.push('/event-details', extra: event),
-              child: FCard(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(event.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                    Text(event.location),
-                    const SizedBox(height: 8),
-                    Text(event.date.toString().substring(0, 10)),
-                  ],
-                ),
-              ),
-            );
+            return EventCard(event: event, index: index);
           },
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-            error: (error, stackTrace) => Center(child: Text('Error: $error')),
+      error: (error, stackTrace) => Center(child: Text('Error: $error')),
     );
   }
 }
