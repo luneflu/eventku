@@ -26,6 +26,29 @@ class MyApp extends ConsumerWidget {
       title: 'Eventku',
       routerConfig: router,
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        brightness: Brightness.light,
+        fontFamily: 'Inter',
+        scaffoldBackgroundColor: friendlyLightColors.background,
+        colorScheme: ColorScheme.light(
+          primary: friendlyLightColors.primary,
+          surface: friendlyLightColors.background,
+          error: friendlyLightColors.error,
+          onSurface: friendlyLightColors.foreground,
+        ),
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        fontFamily: 'Inter',
+        scaffoldBackgroundColor: friendlyDarkColors.background,
+        colorScheme: ColorScheme.dark(
+          primary: friendlyDarkColors.primary,
+          surface: friendlyDarkColors.background,
+          error: friendlyDarkColors.error,
+          onSurface: friendlyDarkColors.foreground,
+        ),
+      ),
+      themeMode: ThemeMode.system,
       builder: (context, child) => FTheme(
         data: MediaQuery.platformBrightnessOf(context) == Brightness.dark 
             ? friendlyDarkTheme 
