@@ -81,12 +81,36 @@ class _EventDetailsScreenState extends ConsumerState<EventDetailsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Status: ${currentEvent.status}', style: const TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 16),
-            Text(currentEvent.description),
-            const SizedBox(height: 16),
-            Text('Date: ${currentEvent.date.toString().substring(0, 10)}'),
-            Text('Location: ${currentEvent.location}'),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
+            Text(currentEvent.description, style: const TextStyle(fontSize: 16, height: 1.5)),
+            const SizedBox(height: 24),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: context.theme.colors.muted,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.calendar_today, size: 20),
+                      const SizedBox(width: 12),
+                      Text('Date: ${currentEvent.date.toString().substring(0, 10)}', style: const TextStyle(fontSize: 16)),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      const Icon(Icons.location_on, size: 20),
+                      const SizedBox(width: 12),
+                      Expanded(child: Text('Location: ${currentEvent.location}', style: const TextStyle(fontSize: 16))),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
             if (eventState.hasError)
               FAlert(
                 title: const Text('Error'),
@@ -137,45 +161,58 @@ class _EventDetailsScreenState extends ConsumerState<EventDetailsScreen> {
             ] else ...[
               // Participant actions
               if (!hasJoined && currentEvent.status == 'public') ...[
-                FButton(
-                  onPress: () => _performAction(() => ref.read(eventDetailsViewModelProvider(widget.event).notifier).participate()),
-                  child: const Text('Participate'),
+                SizedBox(
+                  width: double.infinity,
+                  child: FButton(
+                    onPress: () => _performAction(() => ref.read(eventDetailsViewModelProvider(widget.event).notifier).participate()),
+                    child: const Text('Participate Now'),
+                  ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
               ],
               if (hasJoined && currentEvent.status == 'public') ...[
-                FButton(
-                  variant: FButtonVariant.outline,
-                  onPress: () => _performAction(() => ref.read(eventDetailsViewModelProvider(widget.event).notifier).cancelParticipation()),
-                  child: const Text('Cancel Participation'),
+                SizedBox(
+                  width: double.infinity,
+                  child: FButton(
+                    variant: FButtonVariant.outline,
+                    onPress: () => _performAction(() => ref.read(eventDetailsViewModelProvider(widget.event).notifier).cancelParticipation()),
+                    child: const Text('Cancel Participation'),
+                  ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
               ],
               if (currentEvent.status == 'finished' && hasJoined) ...[
-                const SizedBox(height: 16),
-                FButton(
-                  onPress: _downloadCertificate,
-                  child: const Text('Download Certificate'),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: FButton(
+                    onPress: _downloadCertificate,
+                    child: const Text('Download Certificate'),
+                  ),
                 ),
               ],
             ],
             if (currentEvent.participants != null && currentEvent.participants!.isNotEmpty) ...[
-              const SizedBox(height: 24),
-              const Text('Participants', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 8),
+              const SizedBox(height: 32),
+              const Text('Participants', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 16),
               ...currentEvent.participants!.map((user) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    padding: const EdgeInsets.symmetric(vertical: 8),
                     child: Row(
                       children: [
-                        const Icon(Icons.person, size: 16),
-                        const SizedBox(width: 8),
+                        CircleAvatar(
+                          radius: 20,
+                          backgroundColor: context.theme.colors.muted,
+                          child: Icon(Icons.person, size: 20, color: context.theme.colors.mutedForeground),
+                        ),
+                        const SizedBox(width: 16),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(user.name),
+                              Text(user.name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
                               if (user.joinedAt != null)
-                                Text('Joined: ${user.joinedAt!.toString().substring(0, 16)}', style: TextStyle(fontSize: 12, color: context.theme.colors.mutedForeground)),
+                                Text('Joined: ${user.joinedAt!.toString().substring(0, 16)}', style: TextStyle(fontSize: 13, color: context.theme.colors.mutedForeground)),
                             ],
                           ),
                         ),

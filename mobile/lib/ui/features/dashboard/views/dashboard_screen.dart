@@ -29,11 +29,11 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     return FScaffold(
       header: FHeader(
         title: Text(
-          ['Events', 'Scan QR', 'My Attendance', 'My Events'][_currentIndex],
+          ['Discover', 'Scan QR', 'Attended', 'My Events'][_currentIndex],
           style: TextStyle(
             color: context.theme.colors.foreground,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+            fontSize: 28, // Made it larger for a friendlier look
+            fontWeight: FontWeight.w800,
           ),
         ),
         suffixes: [

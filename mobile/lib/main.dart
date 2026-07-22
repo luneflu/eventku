@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forui/forui.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'navigation/router.dart';
 import 'ui/core/theme/theme.dart';
 
@@ -28,7 +29,9 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.light,
-        fontFamily: 'Inter',
+        textTheme: GoogleFonts.interTextTheme(
+          ThemeData(brightness: Brightness.light).textTheme,
+        ),
         scaffoldBackgroundColor: friendlyLightColors.background,
         colorScheme: ColorScheme.light(
           primary: friendlyLightColors.primary,
@@ -39,7 +42,9 @@ class MyApp extends ConsumerWidget {
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
-        fontFamily: 'Inter',
+        textTheme: GoogleFonts.interTextTheme(
+          ThemeData(brightness: Brightness.dark).textTheme,
+        ),
         scaffoldBackgroundColor: friendlyDarkColors.background,
         colorScheme: ColorScheme.dark(
           primary: friendlyDarkColors.primary,
