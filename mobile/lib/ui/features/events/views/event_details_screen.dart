@@ -70,7 +70,7 @@ class _EventDetailsScreenState extends ConsumerState<EventDetailsScreen> {
         title: Text(currentEvent.title),
         suffixes: [
           FHeaderAction(
-            icon: Icon(FIcons.chevronLeft),
+            icon: Icon(Icons.chevron_left),
             onPress: () => context.pop(),
           ),
         ],

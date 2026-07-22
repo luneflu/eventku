@@ -1,33 +1,32 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Console\Commands;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
+use Illuminate\Console\Command;
 use App\Models\Event;
+use App\Models\User;
 use Intervention\Image\Alignment;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 
-class CertificateController extends Controller
+#[Signature('certificate:generate {event_id} {user_id}')]
+#[Description('Generate a certificate for testing')]
+class GenerateCertificateCommand extends Command
 {
-    public function generate(Event $event)
+    public function handle()
     {
-        $user = auth()->user();
+        $eventId = $this->argument('event_id');
+        $userId = $this->argument('user_id');
 
-        // 1. Check event finished
-        if ($event->status !== 'finished') {
-            return response()->json(['message' => 'Event is not finished yet.'], 403);
-        }
-
-        // 2. Check user attended
-        $participation = $user->participations()->where('event_id', $event->id)->first();
-        if (!$participation || !$participation->attended) {
-            return response()->json(['message' => 'You did not attend this event.'], 403);
-        }
+        $event = Event::findOrFail($eventId);
+        $user = User::findOrFail($userId);
 
         $templatePath = base_path('../assets/certificate_template.png');
         if (!file_exists($templatePath)) {
-            return response()->json(['message' => 'Template not found.'], 500);
+            $this->error('Template not found.');
+            return;
         }
 
         $manager = ImageManager::usingDriver(Driver::class);
@@ -68,11 +67,7 @@ class CertificateController extends Controller
 
         $path = storage_path('app/public/certificate_' . $event->id . '.png');
         $image->save($path);
-        $bytes = file_get_contents($path);
-        // unlink($path); // Commented out to keep the file for testing
-
-        return response($bytes)
-            ->header('Content-Type', 'image/png')
-            ->header('Content-Disposition', 'attachment; filename="certificate_' . $event->id . '.png"');
+        
+        $this->info("Certificate saved at: " . $path);
     }
 }

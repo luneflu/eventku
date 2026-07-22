@@ -38,9 +38,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         ),
         suffixes: [
           FHeaderAction(
-            icon: Icon(FIcons.logOut),
-            onPress: () async {
-              await ref.read(authViewModelProvider.notifier).logout();
+            icon: Icon(Icons.logout),
+            onPress: () {
+              ref.read(authViewModelProvider.notifier).logout();
             },
           ),
         ],
@@ -54,19 +54,19 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         },
         children: [
           FBottomNavigationBarItem(
-            icon: Icon(FIcons.house),
+            icon: Icon(Icons.home),
             label: const Text('Home'),
           ),
           FBottomNavigationBarItem(
-            icon: Icon(FIcons.scan),
+            icon: Icon(Icons.qr_code_scanner),
             label: const Text('Scan'),
           ),
           FBottomNavigationBarItem(
-            icon: Icon(FIcons.ticket),
+            icon: Icon(Icons.airplane_ticket),
             label: const Text('Attended'),
           ),
           FBottomNavigationBarItem(
-            icon: Icon(FIcons.calendar),
+            icon: Icon(Icons.calendar_month),
             label: const Text('Created'),
           ),
         ],

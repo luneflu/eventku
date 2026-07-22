@@ -25,11 +25,12 @@ class AttendedTab extends ConsumerWidget {
             return GestureDetector(
               onTap: () => context.push('/event-details', extra: event),
               child: FCard(
-                title: Text(event.title),
-                subtitle: Text(event.location),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(event.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    Text(event.location),
+                    const SizedBox(height: 8),
                     Text(event.date.toString().substring(0, 10)),
                   ],
                 ),

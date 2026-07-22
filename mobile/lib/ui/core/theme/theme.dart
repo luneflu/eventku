@@ -55,11 +55,15 @@ final friendlyRadii = FBorderRadius(
 );
 
 final _baseLight = FThemeData(colors: friendlyLightColors, touch: true);
-final friendlyLightTheme = _baseLight.copyWith(
+final friendlyLightTheme = FThemeData(
+  colors: friendlyLightColors,
+  touch: true,
   style: _baseLight.style.copyWith(borderRadius: friendlyRadii),
 );
 
 final _baseDark = FThemeData(colors: friendlyDarkColors, touch: true);
-final friendlyDarkTheme = _baseDark.copyWith(
+final friendlyDarkTheme = FThemeData(
+  colors: friendlyDarkColors,
+  touch: true,
   style: _baseDark.style.copyWith(borderRadius: friendlyRadii),
 );

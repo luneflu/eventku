@@ -83,7 +83,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         prefixes: [
           FButton.icon(
             onPress: () => context.pop(),
-            child: Icon(FIcons.arrowLeft),
+            child: Icon(Icons.arrow_left),
           ),
         ],
       ),

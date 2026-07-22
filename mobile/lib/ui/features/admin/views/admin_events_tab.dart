@@ -21,11 +21,11 @@ class AdminEventsTab extends ConsumerWidget {
           itemBuilder: (context, index) {
             final event = events[index];
             return FCard(
-              title: Text(event.title),
-              subtitle: Text(event.date.toIso8601String().substring(0, 10)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text(event.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  Text(event.date.toIso8601String().substring(0, 10)),
                   const SizedBox(height: 8),
                   Text('Status: ${event.status}'),
                   Text('Organizer: ${event.organizer?.name ?? 'Unknown'}'),

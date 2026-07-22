@@ -21,11 +21,11 @@ class AdminUsersTab extends ConsumerWidget {
           itemBuilder: (context, index) {
             final user = users[index];
             return FCard(
-              title: Text(user.name),
-              subtitle: Text(user.email),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text(user.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  Text(user.email),
                   const SizedBox(height: 8),
                   Text('Role: ${user.role}'),
                   const SizedBox(height: 8),
