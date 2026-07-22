@@ -14,8 +14,8 @@ class AdminController extends Controller
     public function users(): JsonResponse
     {
         $users = QueryBuilder::for(User::class)
-            ->allowedFilters(['name', 'email', 'role', 'is_banned'])
-            ->allowedSorts(['id', 'name', 'created_at'])
+            ->allowedFilters('name', 'email', 'role', 'is_banned')
+            ->allowedSorts('id', 'name', 'created_at')
             ->defaultSort('-created_at')
             ->paginate();
 
@@ -38,8 +38,8 @@ class AdminController extends Controller
     {
         $events = QueryBuilder::for(Event::class)
             ->with(['organizer'])
-            ->allowedFilters(['title', 'status', 'is_banned'])
-            ->allowedSorts(['id', 'date', 'created_at'])
+            ->allowedFilters('title', 'status', 'is_banned')
+            ->allowedSorts('id', 'date', 'created_at')
             ->defaultSort('-created_at')
             ->paginate();
 

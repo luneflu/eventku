@@ -2,8 +2,8 @@
 
 namespace App\Data;
 
-use Spatie\LaravelData\Data;
 use App\Models\User;
+use Spatie\LaravelData\Data;
 
 class UserData extends Data
 {
@@ -11,6 +11,8 @@ class UserData extends Data
         public int $id,
         public string $name,
         public string $email,
+        public string $role,
+        public bool $is_banned,
         public ?string $joined_at = null,
     ) {}
 
@@ -20,6 +22,8 @@ class UserData extends Data
             id: $user->id,
             name: $user->name,
             email: $user->email,
+            role: $user->role,
+            is_banned: $user->is_banned,
             joined_at: $user->pivot ? $user->pivot->created_at?->toIso8601String() : null,
         );
     }
