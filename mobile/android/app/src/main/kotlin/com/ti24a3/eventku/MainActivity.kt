@@ -1,4 +1,4 @@
-package com.WOK.EventKu
+package com.ti24a3.eventku
 
 import io.flutter.embedding.android.FlutterActivity
 
